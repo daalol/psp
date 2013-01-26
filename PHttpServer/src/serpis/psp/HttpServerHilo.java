@@ -32,8 +32,11 @@ public class HttpServerHilo implements Runnable  {
 	
 		public void run(Socket socket) throws IOException, InterruptedException{
 			
+			//Para obtener el nombre del fichero (lo que sea .html)
 			String fileName= getFileName(socket.getInputStream());
+			
 			writeHeader(socket.getOutputStream(),fileName);
+			
 			writeFile(socket.getOutputStream(),fileName);
 			
 			socket.close();
@@ -46,13 +49,23 @@ public class HttpServerHilo implements Runnable  {
 		
 		//Implementar
 		private String getFileName(java.io.InputStream inputStream){
-			final String fileName="index.html";
-			Scanner scanner = new Scanner (inputStream);
-			
-			while (true){//buscar el GET y extraer la cadena del archivo
+			Scanner scanner = new Scanner( inputStream );
+
+			//String fileName = "index.html";
+			String fileName = "";
+
+			while (true) {
 				String line = scanner.nextLine();
 				System.out.println(line);
-				if(line.equals("")) break;//la linea en blanco es la final de la peticion
+				if (line.startsWith("GET")) { //GET /index.html HTTP/1.1
+				int index = 5;
+					while (line.charAt(index) != ' ')
+						fileName += line.charAt(index++);
+	
+				System.out.println("fileName="+fileName);
+			}
+			if (line.equals(""))
+			break;
 			}
 			return fileName;
 		

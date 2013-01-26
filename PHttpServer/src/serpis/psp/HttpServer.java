@@ -26,9 +26,9 @@ public class HttpServer {
 		while(true){
 		Socket socket = serverSocket.accept();//proceso se detiene esperando una conexion
 		
-		
 		HttpServerHilo h = new HttpServerHilo(socket);
-		h.run();
+		new Thread(h).start();
+		//h.run();
 		}
 	}
 
